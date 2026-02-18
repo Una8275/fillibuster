@@ -545,16 +545,7 @@
 
 
         function checkWin(justVetoed) {
-/*************  ✨ Windsurf Command ⭐  *************/
-/**
- * Checks if the game has been won or not.
- * If 5 laws have been passed, the game is won by the legislators.
- * If 6 vetoes have been issued, the game is won by the obstructionists.
- * If the game has just been vetoed and the veto power is not "None", trigger the power.
- * Otherwise, start the next round.
- * @param {boolean} justVetoed - whether the game has just been vetoed or not
- */
-/*******  aab32a1f-79ed-49bc-b9fb-2e12a1c8d7df  *******/        if (laws >= 5) showModal("Legislator Victory", "5 Laws passed!");
+            if (laws >= 5) showModal("Legislator Victory", "5 Laws passed!");
             else if (vetoes >= 6) showModal("Obstructionist Victory", "6 Vetoes passed!");
             else if (justVetoed && powers[vetoes - 1] !== "None") triggerPower();
             else nextRound();
