@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE FILIBUSTER | Legislative Strategy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Sarina&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --bg-muted: #f9f9f7;
+            --house-muted: #4a7c59;
+            --pres-muted: #944a4a;
+            --white: #fff;
+            --accent: #7a0a0a;
+            --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.06);
+            --shadow-deep: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Plus Jakarta Sans", sans-serif;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--primary);
+            line-height: 1.6;
+        }
+
+
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+
+        .container {
+            max-width: 1300px;
+            margin: auto;
+            padding: 0 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+        }
+
+        .sarina-regular {
+            font-family: "Sarina", cursive;
+            font-size: 1.1rem;
+            color: var(--pres-muted);
+        }
+
+
+        .game-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2.5rem;
+            padding: 2rem 0;
+            align-items: start;
+        }
+
+
+        .side-tracker {
+            background: var(--bg-muted);
+            border-radius: 30px;
+            padding: 1.5rem;
+            position: sticky;
+            top: 110px;
+            height: calc(100vh - 150px);
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+        }
+
+        .tracker-header {
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .log-entry {
+            background: white;
+            padding: 1rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            border: 1px solid #efefef;
+        }
+
+
+        .live-tracker {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-deep);
+        }
+
+        .step-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .live-tracker b {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .live-tracker p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+
+        .player-switch {
+            display: flex;
+            background: var(--bg-muted);
+            padding: 0.8rem;
+            border-radius: 100px;
+            margin-bottom: 2rem;
+            gap: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .player-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 90px;
+        }
+
+        .player-tag {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: var(--pres-muted);
+            height: 18px;
+            text-transform: uppercase;
+        }
+
+        .player-btn {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 100px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .player-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .player-btn.removed {
+            text-decoration: line-through;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+
+        .status-box {
+            background: var(--white);
+            border-radius: 40px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-deep);
+            text-align: center;
+            margin-bottom: 2rem;
+            border: 1px solid #f0f0f0;
+            min-height: 350px;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .card {
+            width: 160px;
+            height: 230px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.4s;
+            border: 1px solid #eee;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .card-law {
+            color: var(--house-muted);
+            background: #f0f9f2;
+        }
+
+        .card-veto {
+            color: var(--pres-muted);
+            background: #fdf2f2;
+        }
+
+
+        .track {
+            background: var(--bg-muted);
+            padding: 1.5rem;
+            border-radius: 30px;
+        }
+
+        .slot-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .slot {
+            width: 45px;
+            height: 65px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.05);
+            border: 2px dashed #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.5rem;
+            color: #999;
+            text-align: center;
+        }
+
+        .filled-law {
+            background: var(--house-muted) !important;
+            border: none;
+        }
+
+        .filled-veto {
+            background: var(--pres-muted) !important;
+            border: none;
+        }
+
+
+        .button {
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            background: #eee;
+            transition: 0.3s;
+            margin: 0.4rem;
+        }
+
+        .button:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+
+        #lobby {
+            text-align: center;
+            padding: 5rem;
+            background: var(--bg-muted);
+            border-radius: 50px;
+            max-width: 900px;
+            margin: 4rem auto;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 40px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <header>
+        <h1>The Filibuster</h1>
+        <span class="sarina-regular">Legislative Strategy Simulator</span>
+    </header>
+
+
+    <div class="container">
+        <div id="lobby">
+            <h2 style="font-size: 2rem; font-weight: 800;">Congressional Assembly</h2>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 2rem; margin: 3rem 0;">
+                <button class="button" onclick="adjustPlayers(-1)">-</button>
+                <span id="playerDisplay" style="font-size: 4rem; font-weight: 800;">5</span>
+                <button class="button" onclick="adjustPlayers(1)">+</button>
+            </div>
+            <button class="button btn-primary" onclick="startGame()">Start Session</button>
+            <button class="button" onclick="showRulebook()">Rulebook</button>
+        </div>
+
+
+        <div id="game-screen" class="game-wrapper" style="display:none;">
+            <div class="main-column">
+                <div class="live-tracker">
+                    <span id="stepBadge" class="step-badge">Step 1 / 14</span>
+                    <b id="trackerStep">Legislative Step Progress</b>
+                    <p id="trackerText">Loading session...</p>
+                </div>
+                <div class="player-switch" id="playerBar"></div>
+                <div class="status-box">
+                    <h2 id="phaseTitle">Phase</h2>
+                    <p id="phaseDesc">Action Required</p>
+                    <div id="gameContent" class="card-container"></div>
+                </div>
+                <div class="track-area" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="track">
+                        <h4 style="color: var(--house-muted)">Laws (5 to Win)</h4>
+                        <div class="slot-row" id="lawTrack"></div>
+                    </div>
+                    <div class="track">
+                        <h4 style="color: var(--pres-muted)">Vetoes (6 to Win)</h4>
+                        <div class="slot-row" id="vetoTrack"></div>
+                        <p id="electionTrackerDisplay" style="margin-top: 10px; font-size: 0.7rem; font-weight: 800;">
+                            ELECTION FAILURES: 0/3</p>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="button" onclick="showRulebook()">Rulebook</button>
+                    <button class="button" onclick="location.reload()" style="opacity: 0.7;">Reset Session</button>
+                </div>
+            </div>
+            <aside class="side-tracker">
+                <div class="tracker-header">Legislative Log</div>
+                <div id="historyLog"></div>
+            </aside>
+        </div>
+    </div>
+
+
+    <div class="overlay" id="overlay">
+        <div class="modal">
+            <h2 id="modalTitle"></h2>
+            <div id="modalContent"></div>
+            <button class="button btn-primary" onclick="closeModal()" style="width: 100%; margin-top: 20px;">Return to
+                Floor</button>
+        </div>
+    </div>
+
+
+    <script>
+        let playerCount = 5, laws = 0, vetoes = 0, electionFailures = 0, sponsor = 0, chair = -1, roles = [], currentCards = [], roundCount = 1, removedPlayers = [];
+        let isWaitingForPower = false;
+
+
+        const powers = ["None", "Investigate", "Check", "Filibuster", "Override", "Override"];
+
+        const legislativeSteps = [
+            "The bill is created out of an idea from a lawmaker, citizen, or special interest group.",
+            "The bill is introduced in either house by a lawmaker.",
+            "The Speaker of the House sends the bill to a specific standing committee.",
+            "The bill is studied by the committee, marked up, passed or killed.",
+            "The bill is debated and voted on by the House/Senate. The bill fails or is passed.",
+            "The bill is sent to the other house.",
+            "The bill is sent to a specific standing committee by the Majority Leader.",
+            "The bill is studied by the committee, marked up, passed or killed.",
+            "The bill is debated and voted on by the House/Senate. The bill fails or is passed.",
+            "Differing versions of the bill are worked out in the Conference Committee.",
+            "Both houses must approve the conference bill.",
+            "The president signs or vetoes the bill. Pocket veto or failure to act is also possible.",
+            "Override of a veto requires 2/3rd of both houses.",
+            "The bill becomes LAW."
+        ];
+
+
+        function adjustPlayers(val) {
+            playerCount = Math.max(4, Math.min(10, playerCount + val));
+            document.getElementById('playerDisplay').innerText = playerCount;
+        }
+
+
+        function updateProgress(stepIdx, title, desc) {
+            document.getElementById('stepBadge').innerText = `Step ${stepIdx + 1} / 14`;
+            document.getElementById('trackerText').innerText = legislativeSteps[stepIdx];
+            document.getElementById('phaseTitle').innerText = title;
+            document.getElementById('phaseDesc').innerText = desc;
+            updatePlayerBar();
+        }
+
+
+        function updatePlayerBar() {
+            const bar = document.getElementById('playerBar');
+            bar.innerHTML = '';
+            for (let i = 0; i < playerCount; i++) {
+                let tag = (i === sponsor) ? "Sponsor" : (i === chair ? "Chair" : "");
+                bar.innerHTML += `<div class="player-item"><span class="player-tag">${tag}</span><button class="player-btn ${i === sponsor ? 'active' : ''} ${removedPlayers.includes(i) ? 'removed' : ''}" onclick="showRole(${i})">P${i + 1}</button></div>`;
+            }
+        }
+
+
+        function startGame() {
+            document.getElementById('lobby').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'grid';
+            let pool = ["Lead Obstructionist", "Obstructionist"];
+            if (playerCount >= 7) pool.push("Obstructionist");
+            while (pool.length < playerCount) pool.push("Legislator");
+            roles = pool.sort(() => Math.random() - 0.5);
+            initTracks();
+            startElection();
+        }
+
+
+        function initTracks() {
+            document.getElementById('lawTrack').innerHTML = Array(5).fill('<div class="slot"></div>').join('');
+            document.getElementById('vetoTrack').innerHTML = Array(6).fill(null).map((_, i) => `<div class="slot"><span>${powers[i]}</span></div>`).join('');
+        }
+
+
+        function startElection() {
+            chair = -1;
+            updateProgress(2, "The Election", `Sponsor (P${sponsor + 1}): Nominate a Committee Chair.`);
+            const content = document.getElementById('gameContent');
+            content.innerHTML = '';
+            for (let i = 0; i < playerCount; i++) if (i !== sponsor && !removedPlayers.includes(i)) content.innerHTML += `<button class="button" onclick="confirmNomination(${i})">P${i + 1}</button>`;
+        }
+
+
+        function confirmNomination(id) {
+            chair = id; updatePlayerBar();
+            updateProgress(4, "Motion to Proceed", `Does the floor approve Chair P${id + 1}? (50%+ AYE required)`);
+            document.getElementById('gameContent').innerHTML = `<button class="button btn-primary" onclick="handleVote(true)">AYE</button><button class="button" onclick="handleVote(false)">NAY</button>`;
+        }
+
+
+        function handleVote(passed) {
+            if (passed) {
+                electionFailures = 0; document.getElementById('electionTrackerDisplay').innerText = `ELECTION FAILURES: 0/3`;
+                if (vetoes >= 3 && roles[chair] === "Lead Obstructionist") showModal("Obstructionist Victory", "The Lead Obstructionist was elected Chair after 3 Vetoes!");
+                else startSession();
+            } else {
+                electionFailures++; document.getElementById('electionTrackerDisplay').innerText = `ELECTION FAILURES: ${electionFailures}/3`;
+                if (electionFailures >= 3) enactGridlock(); else nextRound();
+            }
+        }
+
+
+        function enactGridlock() {
+            electionFailures = 0;
+            addLog("Gridlock: Failed votes forced a random policy.", "veto");
+            enact(Math.random() > 0.7 ? "LAW" : "VETO");
+        }
+
+
+        function startSession() {
+            updateProgress(9, "Mark-Up Session", "Sponsor: Draw 3 policies and discard 1 secretely.");
+            currentCards = Array(3).fill(null).map(() => Math.random() > 0.7 ? "LAW" : "VETO");
+            renderCards(true);
+        }
+
+
+        function renderCards(isSponsor) {
+            const content = document.getElementById('gameContent');
+            content.innerHTML = '';
+            currentCards.forEach((type, idx) => {
+                const card = document.createElement('div');
+                card.className = `card card-${type.toLowerCase()}`;
+                card.innerHTML = `<strong>${type}</strong>`;
+                card.onclick = () => discard(idx, isSponsor);
+                content.appendChild(card);
+            });
+        }
+
+
+        function discard(idx, isSponsor) {
+            currentCards.splice(idx, 1);
+            if (isSponsor) {
+                updateProgress(10, "Floor Vote", "Chair: Select the final policy version.");
+                renderCards(false);
+            } else enact(currentCards[0]);
+        }
+
+
+        function enact(type) {
+            if (type === "LAW") {
+                document.querySelectorAll('#lawTrack .slot')[laws].classList.add('filled-law');
+                laws++; addLog("Signed into Law.", "law");
+                updateProgress(13, "Victory", "The bill becomes LAW.");
+                checkWin(false);
+            } else {
+                document.querySelectorAll('#vetoTrack .slot')[vetoes].classList.add('filled-veto');
+                vetoes++; addLog("Presidential Veto issued.", "veto");
+                updateProgress(11, "Policy Vetoed", "The president vetoes the bill.");
+                checkWin(true);
+            }
+        }
+
+
+        function checkWin(justVetoed) {
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * Checks if the game has been won or not.
+ * If 5 laws have been passed, the game is won by the legislators.
+ * If 6 vetoes have been issued, the game is won by the obstructionists.
+ * If the game has just been vetoed and the veto power is not "None", trigger the power.
+ * Otherwise, start the next round.
+ * @param {boolean} justVetoed - whether the game has just been vetoed or not
+ */
+/*******  aab32a1f-79ed-49bc-b9fb-2e12a1c8d7df  *******/        if (laws >= 5) showModal("Legislator Victory", "5 Laws passed!");
+            else if (vetoes >= 6) showModal("Obstructionist Victory", "6 Vetoes passed!");
+            else if (justVetoed && powers[vetoes - 1] !== "None") triggerPower();
+            else nextRound();
+        }
+
+
+        function triggerPower() {
+            const p = powers[vetoes - 1];
+            if (p === "Investigate") {
+                isWaitingForPower = true;
+                let preview = Array(3).fill(null).map(() => Math.random() > 0.7 ? "LAW" : "VETO");
+                let cardHtml = '<div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">';
+                preview.forEach(type => cardHtml += `<div class="card card-${type.toLowerCase()}" style="width:100px; height:140px; cursor:default; font-size:0.8rem;">${type}</div>`);
+                cardHtml += '</div>';
+                showModal("Investigation", `Sponsor: You see the next 3 cards in the deck. ${cardHtml}`);
+            }
+            else if (p === "Check") {
+                isWaitingForPower = true;
+                showModal("Interest Check", "Sponsor: Click a player's P# button to see their secret role card, then return here.");
+            }
+            else if (p === "Filibuster") startFilibuster();
+            else if (p === "Override") startOverride();
+        }
+
+
+        function startFilibuster() {
+            updateProgress(12, "The Filibuster", "Sponsor: Choose the next round's Sponsor.");
+            const content = document.getElementById('gameContent'); content.innerHTML = '';
+            for (let i = 0; i < playerCount; i++) if (!removedPlayers.includes(i)) content.innerHTML += `<button class="button" onclick="setNextSponsor(${i})">P${i + 1}</button>`;
+        }
+
+
+        function setNextSponsor(id) { sponsor = (id - 1 + playerCount) % playerCount; nextRound(); }
+
+
+        function startOverride() {
+            updateProgress(12, "Veto Override Power", "Sponsor: Remove a player from the floor.");
+            const content = document.getElementById('gameContent'); content.innerHTML = '';
+            for (let i = 0; i < playerCount; i++) if (i !== sponsor && !removedPlayers.includes(i)) content.innerHTML += `<button class="button" onclick="removePlayer(${i})">Remove P${i + 1}</button>`;
+        }
+
+
+        function removePlayer(id) {
+            if (roles[id] === "Lead Obstructionist") showModal("Legislator Victory", "The Lead Obstructionist was removed!");
+            else { removedPlayers.push(id); addLog(`Player P${id + 1} removed.`, "power"); nextRound(); }
+        }
+
+
+        function nextRound() { roundCount++; sponsor = (sponsor + 1) % playerCount; while (removedPlayers.includes(sponsor)) sponsor = (sponsor + 1) % playerCount; startElection(); }
+        function showRole(i) { showModal(`Member P${i + 1}`, `Secret Role: <b>${roles[i]}</b>`); }
+        function addLog(m, t) { const l = document.getElementById('historyLog'); const d = document.createElement('div'); d.className = `log-entry ${t}`; d.innerHTML = m; l.prepend(d); }
+        function closeModal() { document.getElementById('overlay').style.display = 'none'; if (isWaitingForPower) { isWaitingForPower = false; nextRound(); } }
+
+
+        function showRulebook() {
+            showModal("Legislative Rulebook", `
+            <h3>Win Conditions</h3>
+            <p><b>Legislators:</b> 5 Laws OR remove the Lead Obstructionist.</p>
+            <p><b>Obstructionists:</b> 6 Vetoes OR Lead Obstructionist is Chair after 3 Vetoes.</p>
+            <br>
+            <h3>Roles</h3>
+            <p>Legislators (Majority) vs Obstructionists (Secret Team). Lead Obstructionist must remain hidden.</p>
+            <br>
+            <h3>The 14-Step Process</h3>
+            <ol style="padding-left:15px; font-size:0.85rem;">
+                ${legislativeSteps.map(s => `<li>${s}</li>`).join('')}
+            </ol>
+            <br>
+            <h3>Special Powers</h3>
+            <ul>
+                <li>Investigate: See next 3 cards.</li>
+                <li>Check: View another player's role.</li>
+                <li>Filibuster: Pick next Sponsor.</li>
+                <li>Override: Permanently remove a player.</li>
+            </ul>
+        `);
+        }
+
+
+        function showModal(t, c) { document.getElementById('modalTitle').innerText = t; document.getElementById('modalContent').innerHTML = c; document.getElementById('overlay').style.display = 'flex'; }
+        adjustPlayers(0);
+    </script>
+</body>
+
+</html>
